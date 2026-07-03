@@ -1,0 +1,679 @@
+/* MAIN LAYOUT */
+.pageWrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+.pageHeader {
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 30px;
+  background-color: var(--surface);
+}
+
+.pageLabel {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px 0;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  color: var(--text-primary);
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+/* LEFT SIDEBAR */
+.sidebar {
+  width: 380px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  background-color: var(--surface);
+  flex-shrink: 0;
+}
+
+.sidebarHeader {
+  margin-bottom: 20px;
+}
+
+.sidebarTitle {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.sidebarSubtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* UPLOAD SECTION */
+.uploadBox {
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 24px;
+  background-color: var(--surface-container-low);
+}
+
+.uploadText {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 15px 0;
+  line-height: 1.5;
+}
+
+.uploadButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.chooseFileBtn {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.chooseFileBtn:hover {
+  background-color: var(--surface-hover);
+}
+
+.uploadBtn {
+  flex: 1;
+  padding: 10px 15px;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.uploadBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uploadBtn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.fileSelected {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin: 12px 0 0 0;
+  font-style: italic;
+}
+
+/* ERROR MESSAGE */
+.errorBox {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-size: 13px;
+}
+
+/* DOCUMENT LIST */
+.docItem {
+  padding: 16px;
+  margin-bottom: 12px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.2s;
+}
+
+.docItem:hover {
+  border-color: var(--border-hover);
+  background-color: var(--surface-hover);
+}
+
+.docItem.active {
+  border: 2px solid var(--primary);
+  padding: 15px; /* Offset the 2px border so it doesn't jump */
+}
+
+.docInfo {
+  flex: 1;
+}
+
+.docName {
+  margin: 0 0 8px 0;
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.statusReady {
+  background-color: #e6f4ea;
+  color: #1e8e3e;
+}
+
+.statusProcessing {
+  background-color: #fef0d9;
+  color: #ea8600;
+}
+
+.deleteBtn {
+  background: none;
+  border: 1px solid #fee2e2;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #ef4444;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fef2f2;
+  transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* RIGHT COLUMN */
+.mainContent {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background-color: var(--surface);
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 15px;
+  height: 100%;
+  flex: 1;
+  background-color: var(--surface-container-low);
+  border-radius: 12px;
+}
+
+.documentContainer {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* SECTIONS */
+.sectionBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0 0 5px 0;
+  color: var(--text-primary);
+}
+
+.sectionSubtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* READER PREVIEW */
+.previewBox {
+  height: 500px;
+  background-color: var(--surface-container-low);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+}
+
+.pdfIframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  min-height: 0;   /* required for flex children to shrink correctly */
+}
+
+/* "Open in new tab" fallback bar below the iframe */
+.pdfFallbackBar {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.pdfOpenLink {
+  font-size: 13px;
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pdfOpenLink:hover {
+  text-decoration: underline;
+}
+
+/* INPUTS & BUTTONS */
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.inputLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.textInput {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var(--surface-container-low);
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.textInput:focus {
+  border-color: var(--primary);
+}
+
+.textArea {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: var(--surface-container-low);
+  color: var(--text-primary);
+  outline: none;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.textArea:focus {
+  border-color: var(--primary);
+}
+
+.actionBtn {
+  padding: 10px 20px;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+/* RESULTS */
+.answerBox {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: var(--surface-container-low);
+  border-radius: 8px;
+  border-left: 3px solid var(--primary);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.errorAnswerBox {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fef2f2;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.citationsBox {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.citationsTitle {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--text-secondary);
+}
+
+.citationsBox ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.citationsBox li {
+  margin-bottom: 4px;
+}
+
+.resultsArea {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.searchResult {
+  background-color: var(--surface-container-low);
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.resultText {
+  margin: 0;
+}
+
+/* HIDDEN FILE INPUT */
+.hiddenInput {
+  display: none;
+}
+
+/* LOADING TEXT */
+.loadingText {
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.emptyMessage {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  text-align: center;
+}
+
+/* =============================================
+   TOAST NOTIFICATION
+   ============================================= */
+.toastWrapper {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 12px 24px -4px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+  border-left: 4px solid var(--primary);
+  min-width: 340px;
+  max-width: 420px;
+  backdrop-filter: blur(12px);
+}
+
+.toast.error {
+  border-left-color: #ef4444;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(239, 68, 68, 0.04) 100%);
+}
+
+.toast.success {
+  border-left-color: #10b981;
+  background: linear-gradient(135deg, var(--surface) 0%, rgba(16, 185, 129, 0.04) 100%);
+}
+
+.toastIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.toastIcon.error {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.toastIcon.success {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.toastContent {
+  flex: 1;
+}
+
+.toastTitle {
+  margin: 0 0 2px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toastMessage {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.toastCloseBtn {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.toastCloseBtn:hover {
+  background-color: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+/* =============================================
+   CONFIRMATION MODAL
+   ============================================= */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.confirmModal {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 32px;
+  width: 400px;
+  max-width: 90vw;
+  text-align: center;
+  box-shadow:
+    0 20px 60px -12px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.confirmIconWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.confirmTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+}
+
+.confirmMessage {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0 0 28px 0;
+  line-height: 1.5;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.confirmCancelBtn {
+  flex: 1;
+  padding: 10px 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.confirmCancelBtn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-hover);
+}
+
+.confirmDeleteBtn {
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.confirmDeleteBtn:hover {
+  background: #dc2626;
+}
