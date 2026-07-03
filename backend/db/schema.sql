@@ -95,7 +95,7 @@ COMMENT='User-submitted questions';
 -- TABLE: question_vectors
 -- Description: Vector embeddings for semantic question search
 -- ----------------------------------------------------------------------------
-CREATE TABLE `question_vectors` (
+CREATE TABLE IF NOT EXISTS `question_vectors` (
     `vector_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique vector record identifier',
     `question_id` INT NOT NULL COMMENT 'Associated question (FK)',
     `source_text` TEXT NOT NULL COMMENT 'Text that was embedded',
@@ -117,7 +117,7 @@ COMMENT='Vector embeddings for semantic question search';
 -- TABLE: answers
 -- Description: User answers to questions
 -- ----------------------------------------------------------------------------
-CREATE TABLE `answers` (
+ CREATE TABLE IF NOT EXISTS `answers` (
     `answer_id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique answer identifier',
     `question_id` INT NOT NULL COMMENT 'Question being answered (FK)',
     `user_id` INT NOT NULL COMMENT 'Answer author (FK to users)',
@@ -141,7 +141,7 @@ COMMENT='User answers to questions';
 -- TABLE: votes
 -- Description: Upvotes and downvotes on questions and answers
 -- ----------------------------------------------------------------------------
-CREATE TABLE `votes` (
+CREATE TABLE IF NOT EXISTS `votes` (
     `vote_id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique vote identifier',
     `user_id` INT NOT NULL COMMENT 'User who voted (FK)',
     `target_type` ENUM('question', 'answer') NOT NULL COMMENT 'Type of content being voted on',
@@ -167,7 +167,7 @@ COMMENT='User votes on questions and answers (polymorphic)';
 -- TABLE: bookmarks
 -- Description: User bookmarks for saving favorite questions
 -- ----------------------------------------------------------------------------
-CREATE TABLE `bookmarks` (
+CREATE TABLE IF NOT EXISTS `bookmarks` (
     `bookmark_id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique bookmark identifier',
     `user_id` INT NOT NULL COMMENT 'User who bookmarked (FK)',
     `question_id` INT NOT NULL COMMENT 'Bookmarked question (FK)',
@@ -193,7 +193,7 @@ COMMENT='User bookmarks for saving questions';
 -- TABLE: documents
 -- Description: User-uploaded PDF documents for RAG system
 -- ----------------------------------------------------------------------------
-CREATE TABLE `documents` (
+CREATE TABLE IF NOT EXISTS `documents` (
     `document_id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique document identifier',
     `user_id` INT NOT NULL COMMENT 'Document owner (FK to users)',
     `title` VARCHAR(512) NOT NULL COMMENT 'Document filename/title',
@@ -220,7 +220,7 @@ COMMENT='User-uploaded PDF documents for RAG system';
 -- TABLE: document_chunks
 -- Description: Text chunks extracted from PDF documents
 -- ----------------------------------------------------------------------------
-CREATE TABLE `document_chunks` (
+CREATE TABLE IF NOT EXISTS `document_chunks` (
     `chunk_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique chunk identifier',
     `document_id` INT NOT NULL COMMENT 'Parent document (FK)',
     `chunk_index` INT NOT NULL COMMENT 'Sequential chunk number within document',
@@ -243,7 +243,7 @@ COMMENT='Text chunks extracted from PDF documents';
 -- TABLE: document_chunk_vectors
 -- Description: Vector embeddings for document chunks (RAG semantic search)
 -- ----------------------------------------------------------------------------
-CREATE TABLE `document_chunk_vectors` (
+CREATE TABLE IF NOT EXISTS `document_chunk_vectors` (
     `chunk_vector_id` BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique vector record identifier',
     `chunk_id` BIGINT NOT NULL COMMENT 'Associated chunk (FK)',
     `source_text` TEXT NOT NULL COMMENT 'Text that was embedded',
