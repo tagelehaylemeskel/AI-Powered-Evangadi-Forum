@@ -4,7 +4,9 @@ import axios from "axios";
  * Configured axios instance for API communication.
  */
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3777",
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://ai-powered-evangadi-forum.onrender.com",
   timeout: 420000,
   headers: {
     Accept: "application/json",
