@@ -22,6 +22,7 @@ app.use(
       "http://localhost:3000",
       "https://ai-powered-evangadi-forum.onrender.com",
       "https://ai-powered-evangadi-forum-7glsgwi1o-tagelehaylemeskels-projects.vercel.app",
+      "https://ai-powered-evangadi-forum.vercel.app/",
     ],
   }),
 );
