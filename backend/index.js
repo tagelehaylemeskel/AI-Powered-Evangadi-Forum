@@ -12,18 +12,15 @@ const port = Number(process.env.PORT) || 3777;
 
 // Trust the first proxy hop (required on Render / any reverse-proxy host)
 // so express-rate-limit can read X-Forwarded-For correctly.
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
 // Middleware
-app.use(cors({
-  origin: ["http://localhost:5173", "http://localhost:3000","https://ai-powered-forum-project-g4.onrender.com"]
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static uploads
-app.use('/uploads', express.static('uploads'));
-
+app.use("/uploads", express.static("uploads"));
 
 // Health check
 app.get("/health", (req, res) => {
