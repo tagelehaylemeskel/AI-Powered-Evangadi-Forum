@@ -173,8 +173,15 @@ export default function RagDocuments() {
 
   const handlePreview = async (doc) => {
     if (!doc?.id) return;
+
     try {
       setPdfUrl(null);
+
+      if (doc.storage_path) {
+        setPdfUrl(doc.storage_path);
+        return;
+      }
+
       const url = await fetchPdfObjectUrl(doc.id);
       setPdfUrl(url);
     } catch (err) {
