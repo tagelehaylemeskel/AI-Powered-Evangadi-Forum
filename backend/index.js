@@ -2,11 +2,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 import { db } from "./db/config.js";
 import { mainRouter } from "./src/api/routes.js";
 import { errorHandler } from "./src/middleware/error-handler.js";
 import cors from "cors";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const app = express();
 const port = Number(process.env.PORT) || 3777;
 
@@ -32,6 +36,9 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static uploads
 app.use("/uploads", express.static("uploads"));
 
+// Static frontend files (if built and served from backend)
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
 // Health check
 app.get("/health", (req, res) => {
   res.json({ status: "ok", timestamp: new Date() });
@@ -51,6 +58,18 @@ app.get("/ready", async (req, res) => {
 });
 
 app.use("/api", mainRouter);
+
+// SPA fallback: serve index.html for unknown routes not handled by API
+app.use((req, res, next) => {
+  if (
+    req.method !== "GET" ||
+    req.path.startsWith("/api") ||
+    req.path.startsWith("/uploads")
+  ) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
 
 app.use(errorHandler);
 
