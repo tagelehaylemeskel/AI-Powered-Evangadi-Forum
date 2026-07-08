@@ -31,6 +31,7 @@ export default function RagDocuments() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfSourceUrl, setPdfSourceUrl] = useState(null);
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [aiAnswer, setAiAnswer] = useState(null);
@@ -176,13 +177,10 @@ export default function RagDocuments() {
 
     try {
       setPdfUrl(null);
-
-      if (doc.storage_path) {
-        setPdfUrl(doc.storage_path);
-        return;
-      }
+      setPdfSourceUrl(null);
 
       const url = await fetchPdfObjectUrl(doc.id);
+      setPdfSourceUrl(url);
       setPdfUrl(url);
     } catch (err) {
       console.error("Failed to load PDF:", err);
@@ -349,7 +347,7 @@ export default function RagDocuments() {
                         />
                         <div className={styles.pdfFallbackBar}>
                           <a
-                            href={pdfUrl}
+                            href={pdfSourceUrl || pdfUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className={styles.pdfOpenLink}
@@ -358,6 +356,10 @@ export default function RagDocuments() {
                           </a>
                         </div>
                       </>
+                    ) : pdfSourceUrl ? (
+                      <p className={styles.loadingText}>
+                        Preparing PDF preview...
+                      </p>
                     ) : (
                       <p className={styles.loadingText}>Loading PDF...</p>
                     )}
