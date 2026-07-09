@@ -7,6 +7,7 @@ import {
   queryDocument,
   searchInDocument,
   fetchPdfBlobUrl,
+  fetchPdfSignedUrl,
 } from "../../services/rag/rag.service";
 import {
   Upload,
@@ -32,7 +33,8 @@ export default function RagDocuments() {
   const [isUploading, setIsUploading] = useState(false);
   const [pdfUrl, setPdfUrl] = useState(null);
   const [pdfSourceUrl, setPdfSourceUrl] = useState(null);
-  const [query, setQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [aiQuery, setAiQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [aiAnswer, setAiAnswer] = useState(null);
   const [isQueryingAI, setIsQueryingAI] = useState(false);
@@ -40,6 +42,7 @@ export default function RagDocuments() {
   const [toast, setToast] = useState(null);
   const [confirmModal, setConfirmModal] = useState(null);
   const fileInputRef = React.useRef(null);
+  const pdfBlobUrlRef = React.useRef(null);
 
   const showToast = (title, message, type = "error") => {
     setToast({ title, message, type });
@@ -134,14 +137,14 @@ export default function RagDocuments() {
   };
 
   const handleAskAI = async () => {
-    if (!query.trim()) {
+    if (!aiQuery.trim()) {
       showToast("Empty question", "Please enter a question", "error");
       return;
     }
 
     try {
       setIsQueryingAI(true);
-      const result = await queryDocument(activeDocument.id, query);
+      const result = await queryDocument(activeDocument.id, aiQuery);
       setAiAnswer(result);
     } catch (err) {
       setAiAnswer({
@@ -155,14 +158,14 @@ export default function RagDocuments() {
   };
 
   const handleSearch = async () => {
-    if (!query.trim()) {
+    if (!searchQuery.trim()) {
       showToast("Empty search", "Please enter a search query", "error");
       return;
     }
 
     try {
       setIsSearching(true);
-      const results = await searchInDocument(activeDocument.id, query);
+      const results = await searchInDocument(activeDocument.id, searchQuery);
       setSearchResults(results);
     } catch (err) {
       setSearchResults([]);
@@ -172,16 +175,29 @@ export default function RagDocuments() {
     }
   };
 
+  const revokePdfBlobUrl = () => {
+    if (pdfBlobUrlRef.current) {
+      URL.revokeObjectURL(pdfBlobUrlRef.current);
+      pdfBlobUrlRef.current = null;
+    }
+  };
+
   const handlePreview = async (doc) => {
     if (!doc?.id) return;
 
     try {
       setPdfUrl(null);
       setPdfSourceUrl(null);
+      revokePdfBlobUrl();
 
-      const url = await fetchPdfBlobUrl(doc.id);
-      setPdfUrl(url);
-      setPdfSourceUrl(url);
+      const [blobUrl, signedUrl] = await Promise.all([
+        fetchPdfBlobUrl(doc.id),
+        fetchPdfSignedUrl(doc.id),
+      ]);
+
+      pdfBlobUrlRef.current = blobUrl;
+      setPdfUrl(blobUrl);
+      setPdfSourceUrl(signedUrl);
     } catch (err) {
       console.error("Failed to load PDF:", err);
       showToast("Failed to load PDF", err.message, "error");
@@ -193,12 +209,12 @@ export default function RagDocuments() {
       handlePreview(activeDocument);
     } else {
       setPdfUrl(null);
+      setPdfSourceUrl(null);
+      revokePdfBlobUrl();
     }
 
     return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
+      revokePdfBlobUrl();
     };
   }, [activeDocument]);
 
@@ -291,7 +307,8 @@ export default function RagDocuments() {
                     setPdfUrl(null);
                     setSearchResults([]);
                     setAiAnswer(null);
-                    setQuery("");
+                    setSearchQuery("");
+                    setAiQuery("");
                   }}
                   className={`${styles.docItem} ${activeDocument?.id === doc.id ? styles.active : ""}`}
                 >
@@ -386,8 +403,8 @@ export default function RagDocuments() {
                     <label className={styles.inputLabel}>Search query</label>
                     <input
                       type="text"
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Describe the topic or phrase you are looking for"
                       className={styles.textInput}
                     />
@@ -431,8 +448,8 @@ export default function RagDocuments() {
                   <div className={styles.inputGroup}>
                     <label className={styles.inputLabel}>Question</label>
                     <textarea
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      value={aiQuery}
+                      onChange={(e) => setAiQuery(e.target.value)}
                       placeholder="What does this PDF recommend for route persistence?"
                       className={styles.textArea}
                     />

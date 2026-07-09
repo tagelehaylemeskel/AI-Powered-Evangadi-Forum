@@ -70,12 +70,22 @@ export const queryDocument = async (documentId, query) => {
   }
 };
 
+const parseApiErrorMessage = async (error, fallback) => {
+  const data = error?.response?.data;
+  if (data instanceof Blob) {
+    try {
+      const json = JSON.parse(await data.text());
+      return json.message || json.msg || fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  return data?.message || data?.msg || error?.message || fallback;
+};
+
 /**
- * Fetches a short-lived signed URL for a PDF from the backend,
- * then returns it for use in an <iframe>.
- *
- * The /file endpoint generates a 1-hour signed Cloudinary URL,
- * which works for both private (legacy) and public (new) uploads.
+ * Fetches a short-lived signed URL for a PDF from the backend.
+ * Use for "open in new tab" links — not for iframe embedding.
  *
  * @param {number|string} documentId
  * @returns {Promise<string>} signed URL
@@ -89,18 +99,40 @@ export const fetchPdfSignedUrl = async (documentId) => {
     if (!url) throw new Error("No URL returned from server");
     return url;
   } catch (error) {
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      "Failed to load PDF URL";
+    const message = await parseApiErrorMessage(
+      error,
+      "Failed to load PDF URL",
+    );
     console.error("Error fetching signed PDF URL:", error);
     throw new Error(message);
   }
 };
 
+/**
+ * Downloads the PDF through the authenticated backend proxy and returns
+ * a blob: URL suitable for same-origin iframe preview.
+ *
+ * @param {number|string} documentId
+ * @returns {Promise<string>} blob object URL
+ */
 export const fetchPdfBlobUrl = async (documentId) => {
-  const url = await fetchPdfSignedUrl(documentId);
-  return url;
+  try {
+    const response = await apiClient.get(
+      `/api/rag/documents/${documentId}/file?raw=1`,
+      { responseType: "blob" },
+    );
+
+    const blob = response.data;
+    if (!(blob instanceof Blob) || blob.size === 0) {
+      throw new Error("Received empty PDF from server");
+    }
+
+    return URL.createObjectURL(blob);
+  } catch (error) {
+    const message = await parseApiErrorMessage(error, "Failed to load PDF");
+    console.error("Error fetching PDF blob:", error);
+    throw new Error(message);
+  }
 };
 
 export const fetchPdfObjectUrl = async (documentId) => {
