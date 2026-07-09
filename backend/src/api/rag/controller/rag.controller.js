@@ -86,9 +86,30 @@ export const getDocumentFileController = async (req, res, next) => {
 
     const url = document.storage_path;
 
-    // In this app we upload PDFs as public Cloudinary raw assets, so the stored
-    // secure URL is already directly accessible from the browser.
-    // Returning the stored URL avoids Cloudinary signed URL generation issues.
+    if (req.query.raw === "1") {
+      const response = await fetch(url, {
+        headers: {
+          Accept: "application/pdf",
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        return res.status(StatusCodes.BAD_GATEWAY).json({
+          success: false,
+          message: `Unable to fetch PDF from storage: ${response.status} ${response.statusText}`,
+          detail: errorText,
+        });
+      }
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `inline; filename="${encodeURIComponent(document.title)}"`,
+      );
+      return response.body.pipe(res);
+    }
+
     return res.json({ success: true, url });
   } catch (error) {
     next(error);
