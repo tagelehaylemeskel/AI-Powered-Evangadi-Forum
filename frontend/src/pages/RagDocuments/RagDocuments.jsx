@@ -6,7 +6,7 @@ import {
   deleteDocument,
   queryDocument,
   searchInDocument,
-  fetchPdfObjectUrl,
+  fetchPdfBlobUrl,
 } from "../../services/rag/rag.service";
 import {
   Upload,
@@ -179,9 +179,9 @@ export default function RagDocuments() {
       setPdfUrl(null);
       setPdfSourceUrl(null);
 
-      const url = await fetchPdfObjectUrl(doc.id);
-      setPdfSourceUrl(url);
-      setPdfUrl(url);
+      const blobUrl = await fetchPdfBlobUrl(doc.id);
+      setPdfUrl(blobUrl);
+      setPdfSourceUrl(blobUrl);
     } catch (err) {
       console.error("Failed to load PDF:", err);
       showToast("Failed to load PDF", err.message, "error");
@@ -194,6 +194,12 @@ export default function RagDocuments() {
     } else {
       setPdfUrl(null);
     }
+
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
   }, [activeDocument]);
 
   return (

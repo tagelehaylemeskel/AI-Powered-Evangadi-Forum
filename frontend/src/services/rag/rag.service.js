@@ -80,6 +80,27 @@ export const queryDocument = async (documentId, query) => {
  * @param {number|string} documentId
  * @returns {Promise<string>} signed URL
  */
+export const fetchPdfBlobUrl = async (documentId) => {
+  try {
+    const response = await apiClient.get(
+      `/api/rag/documents/${documentId}/file?raw=1`,
+      {
+        responseType: "blob",
+      },
+    );
+    if (!response.data) throw new Error("No PDF returned from server");
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    const message =
+      error?.response?.data?.msg ||
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to load PDF";
+    console.error("Error fetching PDF blob:", error);
+    throw new Error(message);
+  }
+};
+
 export const fetchPdfObjectUrl = async (documentId) => {
   try {
     const response = await apiClient.get(
