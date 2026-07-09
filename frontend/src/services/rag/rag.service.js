@@ -90,19 +90,26 @@ const parseApiErrorMessage = async (error, fallback) => {
  * @param {number|string} documentId
  * @returns {Promise<string>} signed URL
  */
+// export const fetchPdfSignedUrl = async (documentId) => {
+//   try {
+//     const response = await apiClient.get(
+//       `/api/rag/documents/${documentId}/file`,
+//     );
+//     const url = response.data?.url;
+//     if (!url) throw new Error("No URL returned from server");
+//     return url;
+//   } catch (error) {
+//     const message = await parseApiErrorMessage(error, "Failed to load PDF URL");
+//     console.error("Error fetching signed PDF URL:", error);
+//     throw new Error(message);
+//   }
+// };
 export const fetchPdfSignedUrl = async (documentId) => {
-  try {
-    const response = await apiClient.get(
-      `/api/rag/documents/${documentId}/file`,
-    );
-    const url = response.data?.url;
-    if (!url) throw new Error("No URL returned from server");
-    return url;
-  } catch (error) {
-    const message = await parseApiErrorMessage(error, "Failed to load PDF URL");
-    console.error("Error fetching signed PDF URL:", error);
-    throw new Error(message);
-  }
+  const response = await apiClient.get(`/api/rag/documents/${documentId}/file`);
+
+  console.log(response.data);
+
+  return response.data.url;
 };
 
 /**
