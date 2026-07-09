@@ -131,7 +131,7 @@ export const getDocumentFileController = async (req, res, next) => {
       return response.body.pipe(res);
     }
 
-    return res.json({ success: true, url: signedUrl });
+    return res.json({ success: true, url: document.storage_path });
   } catch (error) {
     next(error);
   }
