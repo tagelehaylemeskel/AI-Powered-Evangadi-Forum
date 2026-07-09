@@ -369,7 +369,11 @@ Answer:
  * Full RAG Query Service
  */
 export const queryDocumentService = async (documentId, userId, query) => {
-  await getDocumentMetaService(documentId, userId);
+  const doc = await getDocumentMetaService(documentId, userId);
+
+  if (doc.status !== "ready") {
+    throw new Error("Document is not ready for AI queries");
+  }
 
   const queryEmbedding = await embedQuery(query);
 

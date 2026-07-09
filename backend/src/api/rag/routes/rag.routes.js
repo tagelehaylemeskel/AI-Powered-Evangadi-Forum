@@ -1,6 +1,9 @@
 import express from "express";
 import { authenticateUser } from "../../../middleware/authentication.js";
-import { uploadDocument } from "../../../middleware/rag.upload.config.js";
+import {
+  uploadDocument,
+  createDocumentMulterErrorHandler,
+} from "../../../middleware/rag.upload.config.js";
 import {
   listDocumentsController,
   getDocumentMetaController,
@@ -34,6 +37,7 @@ router.post(
   "/",
   authenticateUser,
   uploadDocument.single("file"),
+  createDocumentMulterErrorHandler,
   createDocumentController,
 );
 
