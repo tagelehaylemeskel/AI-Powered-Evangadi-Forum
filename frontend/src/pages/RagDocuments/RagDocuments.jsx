@@ -7,7 +7,6 @@ import {
   queryDocument,
   searchInDocument,
   fetchPdfBlobUrl,
-  fetchPdfBlobUrlFromUrl,
 } from "../../services/rag/rag.service";
 import {
   Upload,
@@ -179,20 +178,6 @@ export default function RagDocuments() {
     try {
       setPdfUrl(null);
       setPdfSourceUrl(null);
-
-      if (doc.storage_path) {
-        try {
-          const blobUrl = await fetchPdfBlobUrlFromUrl(doc.storage_path);
-          setPdfUrl(blobUrl);
-          setPdfSourceUrl(doc.storage_path);
-          return;
-        } catch (downloadError) {
-          console.warn(
-            "Direct storage URL failed, falling back to signed URL:",
-            downloadError,
-          );
-        }
-      }
 
       const blobUrl = await fetchPdfBlobUrl(doc.id);
       setPdfUrl(blobUrl);
