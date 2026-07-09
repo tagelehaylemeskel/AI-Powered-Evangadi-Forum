@@ -104,6 +104,12 @@ export const getDocumentFileController = async (req, res, next) => {
         message: "No file URL found for this document",
       });
     }
+    console.log("Storage path from DB:", document.storage_path);
+
+    return res.json({
+      success: true,
+      url: document.storage_path,
+    });
 
     const signedUrl = getSignedCloudinaryUrl(document.storage_path);
 
