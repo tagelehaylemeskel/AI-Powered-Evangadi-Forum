@@ -80,9 +80,8 @@ export const queryDocument = async (documentId, query) => {
  * @param {number|string} documentId
  * @returns {Promise<string>} signed URL
  */
-export const fetchPdfBlobUrl = async (documentId) => {
+export const fetchPdfBlobUrlFromUrl = async (url) => {
   try {
-    const url = await fetchPdfObjectUrl(documentId);
     const blobResponse = await fetch(url, {
       headers: {
         Accept: "application/pdf",
@@ -95,6 +94,17 @@ export const fetchPdfBlobUrl = async (documentId) => {
     }
     const blob = await blobResponse.blob();
     return URL.createObjectURL(blob);
+  } catch (error) {
+    const message = error?.message || "Failed to download PDF from storage";
+    console.error("Error fetching PDF blob from URL:", error);
+    throw new Error(message);
+  }
+};
+
+export const fetchPdfBlobUrl = async (documentId) => {
+  try {
+    const url = await fetchPdfObjectUrl(documentId);
+    return await fetchPdfBlobUrlFromUrl(url);
   } catch (error) {
     const message = error?.message || "Failed to load PDF";
     console.error("Error fetching PDF blob:", error);
