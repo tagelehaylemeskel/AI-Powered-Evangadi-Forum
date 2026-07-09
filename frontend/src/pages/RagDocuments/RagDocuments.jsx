@@ -179,9 +179,9 @@ export default function RagDocuments() {
       setPdfUrl(null);
       setPdfSourceUrl(null);
 
-      const blobUrl = await fetchPdfBlobUrl(doc.id);
-      setPdfUrl(blobUrl);
-      setPdfSourceUrl(blobUrl);
+      const url = await fetchPdfBlobUrl(doc.id);
+      setPdfUrl(url);
+      setPdfSourceUrl(url);
     } catch (err) {
       console.error("Failed to load PDF:", err);
       showToast("Failed to load PDF", err.message, "error");

@@ -80,39 +80,7 @@ export const queryDocument = async (documentId, query) => {
  * @param {number|string} documentId
  * @returns {Promise<string>} signed URL
  */
-export const fetchPdfBlobUrlFromUrl = async (url) => {
-  try {
-    const blobResponse = await fetch(url, {
-      headers: {
-        Accept: "application/pdf",
-      },
-    });
-    if (!blobResponse.ok) {
-      throw new Error(
-        `Failed to download PDF from storage: ${blobResponse.status} ${blobResponse.statusText}`,
-      );
-    }
-    const blob = await blobResponse.blob();
-    return URL.createObjectURL(blob);
-  } catch (error) {
-    const message = error?.message || "Failed to download PDF from storage";
-    console.error("Error fetching PDF blob from URL:", error);
-    throw new Error(message);
-  }
-};
-
-export const fetchPdfBlobUrl = async (documentId) => {
-  try {
-    const url = await fetchPdfObjectUrl(documentId);
-    return await fetchPdfBlobUrlFromUrl(url);
-  } catch (error) {
-    const message = error?.message || "Failed to load PDF";
-    console.error("Error fetching PDF blob:", error);
-    throw new Error(message);
-  }
-};
-
-export const fetchPdfObjectUrl = async (documentId) => {
+export const fetchPdfSignedUrl = async (documentId) => {
   try {
     const response = await apiClient.get(
       `/api/rag/documents/${documentId}/file`,
@@ -121,9 +89,22 @@ export const fetchPdfObjectUrl = async (documentId) => {
     if (!url) throw new Error("No URL returned from server");
     return url;
   } catch (error) {
-    console.error("Error fetching PDF URL:", error);
-    throw error;
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      "Failed to load PDF URL";
+    console.error("Error fetching signed PDF URL:", error);
+    throw new Error(message);
   }
+};
+
+export const fetchPdfBlobUrl = async (documentId) => {
+  const url = await fetchPdfSignedUrl(documentId);
+  return url;
+};
+
+export const fetchPdfObjectUrl = async (documentId) => {
+  return await fetchPdfSignedUrl(documentId);
 };
 
 /**
