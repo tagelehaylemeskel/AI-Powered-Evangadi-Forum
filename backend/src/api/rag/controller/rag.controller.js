@@ -10,6 +10,27 @@ import {
   deleteDocumentService,
 } from "../service/rag.service.js";
 
+const getCloudinaryPublicIdFromUrl = (storagePath) => {
+  const uploadIndex = storagePath.indexOf("/upload/");
+  if (uploadIndex === -1) {
+    throw new Error("Invalid Cloudinary storage_path");
+  }
+
+  let afterUpload = storagePath.slice(uploadIndex + "/upload/".length);
+  afterUpload = afterUpload.replace(/^v\d+\//, "");
+  return afterUpload.replace(/\.[^/.]+$/, "");
+};
+
+const getSignedCloudinaryUrl = (storagePath) => {
+  const publicId = getCloudinaryPublicIdFromUrl(storagePath);
+  return cloudinary.url(publicId, {
+    resource_type: "raw",
+    sign_url: true,
+    secure: true,
+    format: "pdf",
+  });
+};
+
 /**
  * GET /api/rag/documents
  */
@@ -84,10 +105,10 @@ export const getDocumentFileController = async (req, res, next) => {
       });
     }
 
-    const url = document.storage_path;
+    const signedUrl = getSignedCloudinaryUrl(document.storage_path);
 
     if (req.query.raw === "1") {
-      const response = await fetch(url, {
+      const response = await fetch(signedUrl, {
         headers: {
           Accept: "application/pdf",
         },
@@ -97,7 +118,7 @@ export const getDocumentFileController = async (req, res, next) => {
         const errorText = await response.text();
         return res.status(StatusCodes.BAD_GATEWAY).json({
           success: false,
-          message: `Unable to fetch PDF from storage: ${response.status} ${response.statusText}`,
+          message: `Unable to fetch PDF from signed storage URL: ${response.status} ${response.statusText}`,
           detail: errorText,
         });
       }
@@ -110,7 +131,7 @@ export const getDocumentFileController = async (req, res, next) => {
       return response.body.pipe(res);
     }
 
-    return res.json({ success: true, url });
+    return res.json({ success: true, url: signedUrl });
   } catch (error) {
     next(error);
   }
