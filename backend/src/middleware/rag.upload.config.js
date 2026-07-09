@@ -60,15 +60,32 @@ export function uploadBufferToCloudinary(buffer, originalName) {
     const nameWithoutExt = originalName.replace(/\.pdf$/i, "");
     const publicId = `forum-rag-documents/${Date.now()}-${nameWithoutExt}`;
 
+    // const uploadStream = cloudinary.uploader.upload_stream(
+    //   {
+    //     resource_type: "raw",
+    //     public_id: publicId,
+    //     format: "pdf",
+    //     access_mode: "public", // allow direct browser fetch without signed URL
+    //   },
+    //   (error, result) => {
+    //     if (error) return reject(error);
+    //     resolve(result.secure_url);
+    //   },
+    // );
     const uploadStream = cloudinary.uploader.upload_stream(
       {
         resource_type: "raw",
         public_id: publicId,
-        format: "pdf",
-        access_mode: "public", // allow direct browser fetch without signed URL
+        type: "upload",
+        access_mode: "public",
+        use_filename: true,
+        unique_filename: false,
       },
       (error, result) => {
         if (error) return reject(error);
+
+        console.log(result);
+
         resolve(result.secure_url);
       },
     );
